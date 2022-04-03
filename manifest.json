@@ -7,12 +7,14 @@
         "128": "./icon-128x128.png"
     },
     "permissions": [
-        "storage"
+        "storage",
+        "bookmarks"
     ],
     "content_scripts": [
         {
             "matches": ["*://*.youtube.com/watch*"],
-            "js": ["content_script.js"]
+            "js": ["content_script.js"],
+            "css": ["content_script.css"]
         }
     ]
 }

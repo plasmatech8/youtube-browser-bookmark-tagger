@@ -1,0 +1,47 @@
+.tagging-button {
+  background-color: #404040;
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  margin: 0;
+  outline: none;
+  padding: 10px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: color 100ms;
+  vertical-align: baseline;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-bottom: 0.5em;
+}
+
+.tagging-button:hover {
+  background-color: #595959;
+}
+
+.tagging-button-active {
+  background-color: #005ce6;
+}
+
+.tagging-button-active:hover {
+  background-color: #1a75ff;
+}
+
+.tagging-video-title {
+  color: white;
+}
+
+.tagging-container {
+  padding: 1em;
+}

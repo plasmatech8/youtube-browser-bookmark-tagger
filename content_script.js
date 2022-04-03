@@ -1,14 +1,43 @@
 function createTagsPanel() {
+  const queryParams = new URLSearchParams(window.location.search);
   const title = document.title;
+  const videoId = queryParams.get("v");
+
+  // Get Tags
+  const availableTags = ["Foo", "Bar", "Baz"];
+  const activeTags = ["Bar"];
+
+  // Build HTML
   const template = document.createElement("div");
   template.id = "my-awesome-tagging-buttons";
   template.innerHTML = `
-        <div style="background: red;" id="my-awesome-tagging-buttons">
-            <p>
-            ${title}
-            </p>
+        <div class="tagging-container" style="display: flex">
+            <div style="flex-grow: 1">
+              ${availableTags
+                .map(
+                  (tag) =>
+                    `
+                    <button class="tagging-button ${
+                      activeTags.includes(tag) && "tagging-button-active"
+                    }"
+                      data-tag="${tag}"
+                      data-video="${videoId}"
+                    >
+                      ${tag}
+                    </button>
+                    `
+                )
+                .join()}
+            </div>
+            <div>
+              <button class="tagging-button">
+                ${title}
+              </button>
+            </div>
         </div>
     `;
+
+  // Inject HTML
   const existing = document.getElementById("my-awesome-tagging-buttons");
   if (existing) {
     // Update tagging panel if should change
