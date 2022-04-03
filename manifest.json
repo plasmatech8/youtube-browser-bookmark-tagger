@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+    "name": "YT Browser Bookmark Tagger",
+    "description": "Add quick-tagging buttons to YouTube video player if it exists in your browser bookmarks.",
+    "version": "1.0",
+    "icons": {
+        "128": "./icon-128x128.png"
+    },
+    "permissions": [
+        "storage"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["*://*.youtube.com/watch*"],
+            "js": ["content_script.js"]
+        }
+    ]
+}
