@@ -45,3 +45,10 @@
 .tagging-container {
   padding: 1em;
 }
+
+.tagging-video-title {
+  max-width: 30em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

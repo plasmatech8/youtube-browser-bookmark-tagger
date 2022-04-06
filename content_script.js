@@ -30,7 +30,7 @@ function createTagsPanel() {
                 .join()}
             </div>
             <div>
-              <button class="tagging-button">
+              <button class="tagging-button tagging-video-title">
                 ${title}
               </button>
             </div>
@@ -46,7 +46,7 @@ function createTagsPanel() {
     }
   } else {
     // Create tagging panel for first time
-    document.getElementById("player").appendChild(template);
+    document.getElementById("info-contents").prepend(template);
   }
 }
 
