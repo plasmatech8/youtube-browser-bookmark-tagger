@@ -1,9 +1,12 @@
-function createTagsPanel() {
+async function createTagsPanel() {
   const queryParams = new URLSearchParams(window.location.search);
   const title = document.title;
   const videoId = queryParams.get("v");
 
   // Get Tags
+  const x = await browser.runtime.sendMessage({ message: "get_tags", videoId }); // !!!
+  // console.log(x);
+
   const availableTags = ["Foo", "Bar", "Baz"];
   const activeTags = ["Bar"];
 
@@ -21,7 +24,7 @@ function createTagsPanel() {
                       activeTags.includes(tag) && "tagging-button-active"
                     }"
                       data-tag="${tag}"
-                      data-video="${videoId}"
+                      data-videoid="${videoId}"
                     >
                       ${tag}
                     </button>
@@ -38,13 +41,16 @@ function createTagsPanel() {
     `;
 
   // Add button functionality
-  template.addEventListener("click", (event) => {
+  template.addEventListener("click", async (event) => {
     const tag = event.target.dataset.tag;
-    const video = event.target.dataset.video;
-    if (tag && video) {
-      chrome.runtime.sendMessage({ message: "check_storage" }, (res) =>
-        alert(JSON.stringify(res))
-      );
+    const videoId = event.target.dataset.videoid;
+    if (tag && videoId) {
+      const res = await browser.runtime.sendMessage({
+        message: "set_tag",
+        videoId,
+        tag,
+      });
+      alert(JSON.stringify(res, null, 2)); // !!!
     }
   });
 
