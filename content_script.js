@@ -37,6 +37,17 @@ function createTagsPanel() {
         </div>
     `;
 
+  // Add button functionality
+  template.addEventListener("click", (event) => {
+    const tag = event.target.dataset.tag;
+    const video = event.target.dataset.video;
+    if (tag && video) {
+      chrome.runtime.sendMessage({ message: "check_storage" }, (res) =>
+        alert(JSON.stringify(res))
+      );
+    }
+  });
+
   // Inject HTML
   const existing = document.getElementById("my-awesome-tagging-buttons");
   if (existing) {
