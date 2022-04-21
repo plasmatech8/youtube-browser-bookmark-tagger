@@ -1,7 +1,7 @@
 browser.runtime.onMessage.addListener((request, _, sendResponse) => {
   const message = request.message;
   const videoId = request.videoId;
-  const tag = request.tag;
+  const category = request.category;
 
   browser.bookmarks.search(videoId).then(async (searching) => {
     // Validation
@@ -12,11 +12,14 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
       sendResponse({ message: "no_bookmark_found" });
     }
     // Methods
-    if (message === "get_tags") {
-      sendResponse({ tags: searching[0] });
+    if (message === "get_bookmark_info") {
+      const bookmark = searching[0];
+      const folder = await browser.bookmarks.get(bookmark.parentId);
+      sendResponse({ message: "bookmark_found", bookmark, folder });
     }
-    if (message === "set_tag") {
-      sendResponse({ videoId, tag, searching });
+    if (message === "set_bookmark_folder") {
+      await browser.bookmarks.move();
+      sendResponse({ message: "bookmark_moved" });
     }
   });
 
