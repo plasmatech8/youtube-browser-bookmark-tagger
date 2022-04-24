@@ -3,11 +3,11 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
   const videoId = request.videoId;
 
   if (message === "open_options_page") {
-    // Opening options page
+    // Method: Opening options page
     browser.runtime.openOptionsPage();
     sendResponse({ message: "opening_options_page" });
   } else if (message === "get_folders") {
-    // Getting folders for content buttons
+    // Method: Getting folders for content buttons
     browser.bookmarks.getSubTree("unfiled_____").then((search) => {
       const tree = search[0];
       sendResponse({
@@ -25,13 +25,14 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
       if (searching.length === 0) {
         sendResponse({ message: "no_bookmark_found" });
       }
-      // Methods
       if (message === "get_bookmark_info") {
+        // Method: Getting bookmark info
         const bookmark = searching[0];
         const folder = (await browser.bookmarks.get(bookmark.parentId))[0];
         sendResponse({ message: "bookmark_found", bookmark, folder });
       }
       if (message === "set_bookmark_folder") {
+        // Method: Setting bookmark folder
         const bookmark = searching[0];
         const parentId = request.folderId;
         await browser.bookmarks.move(bookmark.id, { parentId });
