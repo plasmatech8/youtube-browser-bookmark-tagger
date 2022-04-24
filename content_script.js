@@ -3,12 +3,15 @@ async function createTagsPanel() {
   const title = document.title;
   const videoId = queryParams.get("v");
 
-  // Get Tags
-  const x = await browser.runtime.sendMessage({ message: "get_tags", videoId }); // !!!
-  // console.log(x);
+  // Get Bookmark Category
+  const info = await browser.runtime.sendMessage({
+    message: "get_bookmark_info",
+    videoId,
+  });
+  // console.log(info);
 
-  const availableTags = ["Foo", "Bar", "Baz"];
-  const activeTags = ["Bar"];
+  const availableFolders = ["Foo", "Bar", "Baz"];
+  const activeFolder = "Bar";
 
   // Build HTML
   const template = document.createElement("div");
@@ -16,17 +19,17 @@ async function createTagsPanel() {
   template.innerHTML = `
         <div class="tagging-container" style="display: flex">
             <div style="flex-grow: 1">
-              ${availableTags
+              ${availableFolders
                 .map(
-                  (tag) =>
+                  (folder) =>
                     `
                     <button class="tagging-button ${
-                      activeTags.includes(tag) && "tagging-button-active"
+                      activeFolder === folder && "tagging-button-active"
                     }"
-                      data-tag="${tag}"
+                      data-folder="${folder}"
                       data-videoid="${videoId}"
                     >
-                      ${tag}
+                      ${folder}
                     </button>
                     `
                 )
@@ -42,13 +45,13 @@ async function createTagsPanel() {
 
   // Add button functionality
   template.addEventListener("click", async (event) => {
-    const tag = event.target.dataset.tag;
+    const folder = event.target.dataset.folder;
     const videoId = event.target.dataset.videoid;
-    if (tag && videoId) {
+    if (folder && videoId) {
       const res = await browser.runtime.sendMessage({
-        message: "set_tag",
+        message: "set_bookmark_folder",
         videoId,
-        tag,
+        folder,
       });
       alert(JSON.stringify(res, null, 2)); // !!!
     }

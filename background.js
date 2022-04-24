@@ -1,7 +1,6 @@
 browser.runtime.onMessage.addListener((request, _, sendResponse) => {
   const message = request.message;
   const videoId = request.videoId;
-  const category = request.category;
 
   browser.bookmarks.search(videoId).then(async (searching) => {
     // Validation
@@ -18,7 +17,8 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
       sendResponse({ message: "bookmark_found", bookmark, folder });
     }
     if (message === "set_bookmark_folder") {
-      await browser.bookmarks.move();
+      const folder = request.folder;
+      // await browser.bookmarks.move();
       sendResponse({ message: "bookmark_moved" });
     }
   });
