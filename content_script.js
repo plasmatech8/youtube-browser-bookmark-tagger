@@ -36,7 +36,7 @@ async function createTagsPanel() {
                 .join()}
             </div>
             <div>
-              <button class="tagging-button tagging-video-title">
+              <button id="tagging-title-button" class="tagging-button tagging-video-title">
                 ${title}
               </button>
             </div>
@@ -47,11 +47,18 @@ async function createTagsPanel() {
   template.addEventListener("click", async (event) => {
     const folder = event.target.dataset.folder;
     const videoId = event.target.dataset.videoid;
+    const id = event.target.id;
     if (folder && videoId) {
       const res = await browser.runtime.sendMessage({
         message: "set_bookmark_folder",
         videoId,
         folder,
+      });
+      alert(JSON.stringify(res, null, 2)); // !!!
+    }
+    if (id === "tagging-title-button") {
+      const res = await browser.runtime.sendMessage({
+        message: "open_options_page",
       });
       alert(JSON.stringify(res, null, 2)); // !!!
     }
