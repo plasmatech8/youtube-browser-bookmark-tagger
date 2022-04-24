@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Options</title>
     <link rel="stylesheet" href="options.css" />
+    <link rel="stylesheet" href="content_script.css" />
     <script defer src="options.js"></script>
   </head>
   <body>
@@ -13,17 +14,15 @@
     <p>Options for YT Bookmarks Re-Organiser webextension.</p>
 
     <p>
-      Videos will be saved to folder: "<code>/Bookmarks Menu/Re-Organised</code
-      >"
+      When a <span class="tagging-button">button</span> is clicked, the video
+      will be moved into a sub-folder in your "Other Bookmarks".
     </p>
 
-    <ul id="sortlist" class="slist">
-      <li>First</li>
-      <li>Second</li>
-      <li>Third</li>
-      <li>Forth</li>
-      <li>Fifth</li>
-    </ul>
-    <button id="createCategoryBtn">Create New Folder</button>
+    <p>A button will show for each sub-folders in your "Other Bookmarks".</p>
+
+    <p>
+      To create new sub-folders buttons, go into your bookmarks manager and
+      create a new folder.
+    </p>
   </body>
 </html>
