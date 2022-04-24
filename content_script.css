@@ -47,8 +47,14 @@
 }
 
 .tagging-video-title {
-  max-width: 30em;
+  max-width: 20em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.tagging-options-button {
+  height: 40px;
+  font-size: 2.4em;
+  padding-top: 6px;
 }

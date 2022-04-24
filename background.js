@@ -3,8 +3,18 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
   const videoId = request.videoId;
 
   if (message === "open_options_page") {
+    // Opening options page
     browser.runtime.openOptionsPage();
     sendResponse({ message: "opening_options_page" });
+  } else if (message === "get_folders") {
+    // Getting folders for content buttons
+    browser.bookmarks.getSubTree("unfiled_____").then((search) => {
+      const tree = search[0];
+      sendResponse({
+        message: "getting_folders",
+        folders: tree.children,
+      });
+    });
   } else {
     // Searching for video
     browser.bookmarks.search(videoId).then(async (searching) => {
@@ -18,12 +28,13 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
       // Methods
       if (message === "get_bookmark_info") {
         const bookmark = searching[0];
-        const folder = await browser.bookmarks.get(bookmark.parentId);
+        const folder = (await browser.bookmarks.get(bookmark.parentId))[0];
         sendResponse({ message: "bookmark_found", bookmark, folder });
       }
       if (message === "set_bookmark_folder") {
-        const folder = request.folder;
-        // await browser.bookmarks.move();
+        const bookmark = searching[0];
+        const parentId = request.folderId;
+        await browser.bookmarks.move(bookmark.id, { parentId });
         sendResponse({ message: "bookmark_moved" });
       }
     });
