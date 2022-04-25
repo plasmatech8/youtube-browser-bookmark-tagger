@@ -73,10 +73,12 @@ async function init() {
   Array.from(temp.getElementsByTagName("details")).forEach((el) =>
     el.removeAttribute("open")
   );
-  console.log();
   if (!temp.isEqualNode(template)) {
     existing.replaceWith(template);
   }
+
+  // Run this again after 10ms
+  setTimeout(init, 10);
 }
 
-setInterval(init, 1000);
+init();

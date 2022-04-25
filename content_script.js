@@ -43,7 +43,7 @@ async function createTagsPanel() {
 
   template.innerHTML = `
         <div class="tagging-container" style="display: flex; gap: 4px;">
-            <div style="flex-grow: 1; display: flex; gap: 4px;">
+            <div style="flex-grow: 1; display: flex; flex-wrap: wrap; gap: 4px;">
               ${
                 noBookmarkFound
                   ? noBookmarkFoundHTML
@@ -97,6 +97,9 @@ async function createTagsPanel() {
     // Create tagging panel for first time
     document.getElementById("info-contents").prepend(template);
   }
+
+  // Run this again after 10ms
+  setTimeout(createTagsPanel, 10);
 }
 
-setInterval(createTagsPanel, 100);
+createTagsPanel();
