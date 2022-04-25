@@ -63,7 +63,11 @@ async function init() {
   template.addEventListener("click", async (event) => {
     const folderId = event.target.dataset.id;
     if (folderId) {
+      // Set destination folder
       await browser.storage.local.set({ destinationFolderId: folderId });
+
+      // Update UI on click
+      init();
     }
   });
 
@@ -76,9 +80,6 @@ async function init() {
   if (!temp.isEqualNode(template)) {
     existing.replaceWith(template);
   }
-
-  // Run this again after 100ms
-  setTimeout(init, 100);
 }
 
 init();
