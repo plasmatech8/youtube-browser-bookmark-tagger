@@ -84,6 +84,8 @@ async function createTagsPanel() {
       });
       console.info(res);
     }
+    // Update the UI on click
+    createTagsPanel();
   });
 
   // Inject HTML
@@ -97,10 +99,12 @@ async function createTagsPanel() {
     // Create tagging panel for first time
     document.getElementById("info-contents").prepend(template);
   }
-
-  // Run this again after 10ms
-  setTimeout(createTagsPanel, 10);
 }
 
+// Create UI on page-load
 createTagsPanel();
-setInterval(createTagsPanel, 1000); // in-function timeout does not trigger on page refresh/change
+
+// Ensure UI updates on page refresh/change
+// Note:  cannot make this too high because bookmark search is an intensive operation and will slow
+//        down the background script if the content script/s calls too frequently.
+setInterval(createTagsPanel, 2000);
