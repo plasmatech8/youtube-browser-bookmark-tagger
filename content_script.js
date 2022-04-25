@@ -37,13 +37,13 @@ async function createTagsPanel() {
       </button>
       `
     )
-    .join();
+    .join("");
   const noBookmarkFoundHTML = `<button class="tagging-button">⚠ No Bookmark Found</button>`;
   const multipleBookmarksFoundHTML = `<button class="tagging-button">⚠ Multiple Bookmark Found</button>`;
 
   template.innerHTML = `
         <div class="tagging-container" style="display: flex; gap: 4px;">
-            <div style="flex-grow: 1;">
+            <div style="flex-grow: 1; display: flex; gap: 4px;">
               ${
                 noBookmarkFound
                   ? noBookmarkFoundHTML
