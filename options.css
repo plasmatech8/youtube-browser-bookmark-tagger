@@ -9,3 +9,7 @@
 #destination-folder-path {
   background-color: lime;
 }
+
+body {
+  margin: 3em;
+}
