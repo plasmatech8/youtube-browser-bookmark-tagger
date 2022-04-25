@@ -8,11 +8,12 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
     sendResponse({ message: "opening_options_page" });
   } else if (message === "get_folders") {
     // Method: Getting folders for content buttons
-    browser.bookmarks.getSubTree("unfiled_____").then((search) => {
-      const tree = search[0];
+    browser.storage.local.get("destinationFolderId").then(async (data) => {
+      const destinationFolderId = data.destinationFolderId || "unfiled_____";
+      const children = await browser.bookmarks.getChildren(destinationFolderId);
       sendResponse({
         message: "getting_folders",
-        folders: tree.children,
+        folders: children.filter((b) => b.type === "folder"),
       });
     });
   } else {
