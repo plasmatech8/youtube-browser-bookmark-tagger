@@ -14,15 +14,25 @@
     <p>Options for YT Bookmarks Re-Organiser webextension.</p>
 
     <p>
-      When a <span class="tagging-button">button</span> is clicked, the video
-      will be moved into a sub-folder in your "Other Bookmarks".
+      A <span class="tagging-button">button</span> will be displayed below the
+      YouTube player for each sub-folder in your selected destination-folder.
     </p>
 
-    <p>A button will show for each sub-folders in your "Other Bookmarks".</p>
+    <p>
+      When the button is clicked, the video bookmark will be moved from its
+      current location to the sub-folder.
+    </p>
 
     <p>
       To create new sub-folders buttons, go into your bookmarks manager and
       create a new folder.
     </p>
+
+    <p>
+      Selected destination-folder: <code id="destination-folder-path"></code>
+    </p>
+    <div id="destination-folder-select">
+      <!-- Populated by options.js -->
+    </div>
   </body>
 </html>
