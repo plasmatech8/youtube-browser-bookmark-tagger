@@ -22,9 +22,11 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
       // Validation
       if (searching.length > 1) {
         sendResponse({ message: "multiple_bookmarks_found" });
+        return;
       }
       if (searching.length === 0) {
         sendResponse({ message: "no_bookmark_found" });
+        return;
       }
       if (message === "get_bookmark_info") {
         // Method: Getting bookmark info
