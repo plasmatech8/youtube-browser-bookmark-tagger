@@ -103,3 +103,4 @@ async function createTagsPanel() {
 }
 
 createTagsPanel();
+setInterval(createTagsPanel, 1000); // in-function timeout does not trigger on page refresh/change

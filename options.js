@@ -77,8 +77,8 @@ async function init() {
     existing.replaceWith(template);
   }
 
-  // Run this again after 10ms
-  setTimeout(init, 10);
+  // Run this again after 100ms
+  setTimeout(init, 100);
 }
 
 init();
