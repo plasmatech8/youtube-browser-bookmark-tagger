@@ -3,7 +3,9 @@
 A webextension which adds buttons below the YouTube video player.
 
 If the video exists in your browser bookmarks, then buttons will be displayed below the video player.
-Each button corresponds to a folder in the "Other Bookmarks" folder in your browser.
+When you click on a button, it will move the bookmark from its current location to the button folder.
+Each button corresponds to a folder in the destination-folder in your browser bookmarks.
+You can set the destination-folder in the options page.
 
 Note that if this YouTube video does not exist in your bookmarks, or duplicate bookmarks exist,
 then a message will be displayed to indicate that you need to remove the duplicate or add the bookmark.
