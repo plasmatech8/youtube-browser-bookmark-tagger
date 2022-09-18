@@ -20,3 +20,31 @@ does not expose tags. (see [bookmarks.BookmarkTreeNode](https://developer.mozill
 
 There was no way to complete this extension without access to tags, so it was decided to focus this
 project on moving bookmarks to different folders instead of setting tags.
+
+## TODO: Major changes
+
+Change into true tagging app, using the bookmark title/name.
+
+background.js
+* current methods:
+  * open_options_page
+  * get_folders
+  * get_bookmark_info
+  * set_bookmark_folder
+* new methods
+  * open_options_page
+  * get_tags (array of array of tags)
+  * get_bookmark ([BookmarkTreeNode](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/bookmarks/BookmarkTreeNode) object)
+  * add_tag
+  * remove_tag
+* Need to clean it up. Use a switch statement and a seperate functions for each method.
+
+content_script.js
+* Move templates into functions
+* Update so that it uses tags system as specified in background.js
+* Each row of tags should be a different color
+
+options.js
+* Remove folder mechanisms
+* Use a simple textarea + CSV reader to determine the tags
+* (note: background methods not necessary because options.js still has access to browser apis)
