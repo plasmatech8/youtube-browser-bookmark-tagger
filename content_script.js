@@ -97,7 +97,7 @@ async function createTagsPanel() {
     }
   } else {
     // Create tagging panel for first time
-    document.getElementById("info-contents").prepend(template);
+    document.getElementById("below").prepend(template);
   }
 }
 
