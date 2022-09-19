@@ -37,19 +37,17 @@ async function createTagsPanel() {
     const id = event.target.id;
     // If clicked on tag button
     if (tag && bookmarkid) {
-      const res = await browser.runtime.sendMessage({
+      await browser.runtime.sendMessage({
         method: "toggle_tag",
         tag,
         bookmarkid,
       });
-      console.info(res);
     }
     // If clicked on options button
     if (id === "tagging-options-button") {
-      const res = await browser.runtime.sendMessage({
+      await browser.runtime.sendMessage({
         method: "open_options_page",
       });
-      console.info(res);
     }
     // Refresh the UI
     createTagsPanel();
@@ -95,7 +93,8 @@ const panelLeftSectionHTML = (bookmarkResponse, tagsResponse) => {
       switch (tagsResponse.message) {
         case "got_tags":
           const tags = tagsResponse.tags;
-          return tagButtonRowsHTML(bookmark, tags);
+          if (tags) return tagButtonRowsHTML(bookmark, tags);
+          return `<button class="tagging-button">No Tags - Go to Settings</button>`;
         default:
           return `<button class="tagging-button">⚠ Error Getting Tags</button>`;
       }

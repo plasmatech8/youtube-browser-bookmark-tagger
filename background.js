@@ -28,11 +28,7 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
 
     case "get_tags":
       browser.storage.local.get("tags").then((data) => {
-        const defaultTags = [
-          ["❤️Love", "🎸Rock", "🎷Jazz", "⚡️Electronic"],
-          ["Good", "Neutral", "Bad"],
-        ];
-        const tags = data.tags || defaultTags;
+        const tags = data.tags;
         sendResponse({ message: "got_tags", tags });
       });
       break;
