@@ -1,85 +1,81 @@
-function createFolderTreeHTML(bookmark, selectedId) {
-  const title = bookmark.title;
-  const id = bookmark.id;
-  const children = bookmark.children;
-  const childrenHTML = children
-    .filter((c) => c.type === "folder")
-    .map((c) => createFolderTreeHTML(c, selectedId))
-    .join("");
-  const titleButtonHTML = `
-    <button
-      data-id="${id}"
-      class="btn ${selectedId === id && "btn-active"}"
-    >
-      ${title}
-    </button>
-  `;
-  const contents = children.some((c) => c.type === "folder")
-    ? `<details>
-      <summary>${titleButtonHTML}</summary>
-      <div style="padding-left: 2em;">
-        ${childrenHTML}
-      </div>
-    </details>`
-    : ` <div style="padding-left: 18px;">${titleButtonHTML}</div>`;
-  return `<div style="margin-top: 5px;">${contents}</div>`;
-}
-
-async function getPath(bookmarkId) {
-  const search = await browser.bookmarks.get(bookmarkId);
-  const { title, parentId } = search[0];
-  if (parentId) {
-    const parentPath = await getPath(parentId);
-    return `${parentPath}/${title}`;
+/**
+ * Pre-populate and resize tags input with the current tags saved to storage if they exist.
+ */
+async function initInputField() {
+  //
+  const { tags } = await browser.storage.local.get("tags");
+  const inputElement = document.getElementById("tags-input");
+  if (tags) {
+    inputElement.value = JSON.stringify(tags, null, 4);
+    inputElement.style.height = inputElement.scrollHeight + "px";
   }
-  return title;
+  inputElement.placeholder = `e.g.
+
+[
+  ["❤️Love", "🎸Rock", "🎷Jazz", "⚡️Electronic"],
+  ["Good", "Neutral", "Bad"]
+]
+`;
 }
 
-async function init() {
-  // Get destination folder ID from storage (unfiled_____ if undefined)
-  const selectedDestinationFolderId =
-    (await browser.storage.local.get("destinationFolderId"))
-      .destinationFolderId || "unfiled_____";
-
-  // Display destination-folder path viewer
-  const destFolderPathContainer = document.getElementById(
-    "destination-folder-path"
-  );
-  destFolderPathContainer.innerHTML = await getPath(
-    selectedDestinationFolderId
-  );
-
-  // Construct template for destination-folder tree view and select buttons
-  const template = document.createElement("div");
-  template.id = "destination-folder-select";
-  const bookmarkTree = await browser.bookmarks.getTree();
-  const bookmarkTreeRoot = bookmarkTree[0];
-  const folderTreeHTML = bookmarkTreeRoot.children
-    .map((c) => createFolderTreeHTML(c, selectedDestinationFolderId))
-    .join("");
-  template.innerHTML = folderTreeHTML;
-
-  // Add click functionality to destination-folder tree buttons
-  template.addEventListener("click", async (event) => {
-    const folderId = event.target.dataset.id;
-    if (folderId) {
-      // Set destination folder
-      await browser.storage.local.set({ destinationFolderId: folderId });
-
-      // Update UI on click
-      init();
+/**
+ * Listen for click to submit the tags.
+ */
+function initSubmitButton() {
+  document.getElementById("tags-submit").addEventListener("click", async () => {
+    try {
+      const inputElement = document.getElementById("tags-input");
+      const inputString = inputElement.value;
+      if (inputString) {
+        const inputJson = parseInput(inputString);
+        await browser.storage.local.set({ tags: inputJson });
+        alert("Tags configured ✅");
+      } else {
+        await browser.storage.local.clear();
+        alert("Tags set to default ✅");
+      }
+      initInputField();
+    } catch (error) {
+      alert(error.message);
     }
   });
-
-  // Render destination-folder tree view and select buttons
-  const existing = document.getElementById("destination-folder-select");
-  const temp = existing.cloneNode(true);
-  Array.from(temp.getElementsByTagName("details")).forEach((el) =>
-    el.removeAttribute("open")
-  );
-  if (!temp.isEqualNode(template)) {
-    existing.replaceWith(template);
-  }
 }
 
-init();
+initInputField();
+initSubmitButton();
+
+/**
+ * Helper function to parse and validate input string from the tags input/textarea.
+ */
+function parseInput(inputString) {
+  const rows = JSON.parse(inputString);
+  // Array
+  if (!Array.isArray(rows)) {
+    throw Error("Input should be a JSON array");
+  }
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    // Array of arrays
+    if (!Array.isArray(row)) {
+      throw Error(
+        `Input should be a JSON array of arrays (index ${i} is not an array)`
+      );
+    }
+    for (let j = 0; j < row.length; j++) {
+      const tag = row[j];
+      // Array of array of strings
+      if (typeof tag !== "string") {
+        throw Error(
+          `Input should be a JSON array of arrays of string (index ${i}, ${j} is not a string)`
+        );
+      }
+      // Strings should not have invalid characters
+      if (/ |#|\s/.test(tag)) {
+        throw Error(
+          `Tags should not contain whitespace or # characters (index ${i}, ${j} is not valid)`
+        );
+      }
+    }
+  }
+  return rows;
+}

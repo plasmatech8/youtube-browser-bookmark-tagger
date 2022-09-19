@@ -9,28 +9,33 @@
     <script defer src="options.js"></script>
   </head>
   <body>
-    <h1>Options for YT Bookmark Re-Organiser</h1>
+    <h1>Options for YT Bookmark Tagger</h1>
+
+    <h2>Intro</h2>
+
+    <p>This extension activates when you open a YouTube video.</p>
 
     <p>
-      A <span class="tagging-button">button</span> will be displayed below the
-      YouTube player for each sub-folder in your destination-folder.
+      If the video exists in your browser bookmarks, a bunch of
+      <span class="tagging-button">tag</span> buttons will be displayed below
+      the YouTube player.
     </p>
 
     <p>
-      When one of these buttons are clicked, the bookmark for the playing video
-      will be moved from its current location to the sub-folder for the button.
+      When one of these are clicked, the <code class="btn-active">#tag</code>
+      will be appended to the bookmark title.
     </p>
 
-    <p>
-      To create more buttons, go into your bookmarks manager and create another
-      folder in your destination-folder.
-    </p>
+    <p>To change the tags available, edit the settings below.</p>
 
-    <p>
-      Selected destination-folder: <code id="destination-folder-path"></code>
-    </p>
-    <div id="destination-folder-select">
-      <!-- Populated by options.js -->
+    <h2>Settings</h2>
+
+    <div>
+      <label for="tags-input">Tags:</label>
     </div>
+    <textarea id="tags-input" name="tags-input" rows="6" cols="50"></textarea>
+    <p><i>Tag must not contain whitespace or # characters</i></p>
+    <p><i>Each sub-array is row of tags shown on screen</i></p>
+    <button id="tags-submit" class="btn">Save</button>
   </body>
 </html>
