@@ -95,7 +95,6 @@ const panelLeftSectionHTML = (bookmarkResponse, tagsResponse) => {
       switch (tagsResponse.message) {
         case "got_tags":
           const tags = tagsResponse.tags;
-          console.log(tags);
           return tagButtonRowsHTML(bookmark, tags);
         default:
           return `<button class="tagging-button">⚠ Error Getting Tags</button>`;
