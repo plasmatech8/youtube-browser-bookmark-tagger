@@ -9,21 +9,24 @@
     <script defer src="options.js"></script>
   </head>
   <body>
-    <h1>Options for YT Bookmark Tagger</h1>
+    <h1>YouTube Browser Bookmark Tagger</h1>
 
-    <h2>Intro</h2>
+    <img src="images/example.png" alt="Example Picture" height="250px" />
+
+    <h2>Description</h2>
 
     <p>This extension activates when you open a YouTube video.</p>
 
     <p>
-      If the video exists in your browser bookmarks, a bunch of
-      <span class="tagging-button">tag</span> buttons will be displayed below
-      the YouTube player.
+      If the video exists in your browser bookmarks, then buttons will be
+      displayed below the YouTube video player. (as shown above)
     </p>
 
     <p>
-      When one of these are clicked, the <code class="btn-active">#tag</code>
-      will be appended to the bookmark title.
+      When one of these buttons are clicked, the
+      <code class="btn-active">#tag</code>
+      will be toggled on/off in your browser bookmark. (adds and removes the tag
+      from the browser bookmark title)
     </p>
 
     <p>To change the tags available, edit the settings below.</p>
@@ -31,11 +34,11 @@
     <h2>Settings</h2>
 
     <div>
-      <label for="tags-input">Tags:</label>
+      <label for="tags-input">Tags: (JSON)</label>
     </div>
     <textarea id="tags-input" name="tags-input" rows="6" cols="50"></textarea>
     <p><i>Tag must not contain whitespace or # characters</i></p>
-    <p><i>Each sub-array is row of tags shown on screen</i></p>
+    <p><i>Each sub-array is displayed as a seperate row of tags</i></p>
     <button id="tags-submit" class="btn">Save</button>
   </body>
 </html>
