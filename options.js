@@ -69,6 +69,12 @@ function parseInput(inputString) {
           `Input should be a JSON array of arrays of string (index ${i}, ${j} is not a string)`
         );
       }
+      // Strings should be at least one character
+      if (!tag.length) {
+        throw Error(
+          `Tags must contain at least one character (index ${i}, ${j} is not valid)`
+        );
+      }
       // Strings should not have invalid characters
       if (/ |#|\s/.test(tag)) {
         throw Error(
