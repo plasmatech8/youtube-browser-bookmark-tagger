@@ -9,12 +9,11 @@ A webextension which adds buttons below the YouTube video player.
 If the video exists in your browser bookmarks, then buttons will be
 displayed below the video player. (as shown above)
 
-When you click on a tag button, the #tag will be appended to the title of your browser bookmark.
+When you click on a <code class="btn-active">#tag</code>
+button, the #tag will be appended to the title of your browser bookmark
+and the button will light up.
 
-When one of these buttons are clicked, the
-<code class="btn-active">#tag</code>
-will be toggled on/off in your browser bookmark. (adds and removes the tag
-from the browser bookmark title)
+The tag is toggled on/off with subsequent clicks.
 
 You can configure the tags available in the options page.
 
@@ -28,7 +27,6 @@ Firefox has a native bookmark tagging feature, however it is not supported on an
 Whatsmore, webextension bookmarks API does not expose tags.
 (see [bookmarks.BookmarkTreeNode](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/bookmarks/BookmarkTreeNode))
 So, instead this extension opted towards appending #tags to the bookmark title.
-
 
 Under consideration:
 * Use CSV notation instead of JSON notation to define tags
