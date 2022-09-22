@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
-  "name": "YT Browser Bookmark Re-Organiser",
-  "description": "Add buttons to YouTube video player to move you browser bookmark to a different folder.",
+  "name": "YouTube Browser Bookmark Tagger",
+  "description": "Shows buttons to the YouTube video player to add tags to your browser bookmark.",
   "version": "1.0",
   "icons": {
-    "128": "./icon-128x128.png"
+    "128": "./images/icon-128x128.png"
   },
   "permissions": ["storage", "bookmarks"],
   "background": {
