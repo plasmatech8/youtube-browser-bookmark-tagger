@@ -1,6 +1,6 @@
 # YouTube Browser Bookmark Tagger
 
-!![example](images/example.png)
+![example](images/example.png)
 
 ## Description
 
