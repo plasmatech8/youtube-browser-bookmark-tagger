@@ -1,3 +1,7 @@
+// Initialise custom tags form
+initInputField();
+initSubmitButton();
+
 /**
  * Pre-populate and resize tags input with the current tags saved to storage if they exist.
  */
@@ -40,9 +44,6 @@ function initSubmitButton() {
     }
   });
 }
-
-initInputField();
-initSubmitButton();
 
 /**
  * Helper function to parse and validate input string from the tags input/textarea.
