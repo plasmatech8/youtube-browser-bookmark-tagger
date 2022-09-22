@@ -30,3 +30,8 @@ So, instead this extension opted towards appending #tags to the bookmark title.
 
 Under consideration:
 * Use CSV notation instead of JSON notation to define tags
+
+Zip command for publishing:
+```bash
+zip -r -FS youtube-browser-bookmark-tagger.zip * --exclude '*.git*'
+```
