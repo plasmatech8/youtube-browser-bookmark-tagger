@@ -1,9 +1,7 @@
 // Create UI on page-load
 createTagsPanel();
 
-// Ensure UI updates on page refresh/change
-// Note:  cannot make this too high because bookmark search is an intensive operation and will slow
-//        down the background script if the content script/s calls too frequently.
+// Refresh UI when injected content changes
 setInterval(createTagsPanel, 2000);
 
 /**
