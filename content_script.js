@@ -9,7 +9,6 @@ setInterval(createTagsPanel, 2000);
  */
 async function createTagsPanel() {
   const queryParams = new URLSearchParams(window.location.search);
-  const title = document.title;
   const videoId = queryParams.get("v");
 
   // Get bookmark
@@ -26,7 +25,7 @@ async function createTagsPanel() {
   // Build HTML
   const template = document.createElement("div");
   template.id = "youtube-bookmark-tagging-panel";
-  template.innerHTML = panelHTML(bookmarkResponse, tagsResponse, title);
+  template.innerHTML = panelHTML(bookmarkResponse, tagsResponse);
 
   // Handle click events
   template.addEventListener("click", async (event) => {
@@ -64,16 +63,31 @@ async function createTagsPanel() {
   }
 }
 
-const panelHTML = (bookmarkResponse, tagsResponse, title) => {
+const panelHTML = (bookmarkResponse, tagsResponse) => {
   return `
     <div class="tagging-container" style="display: flex; gap: 4px;">
         <div style="display: flex; flex-grow: 1; flex-direction: column; gap: 0px;">
           ${panelLeftSectionHTML(bookmarkResponse, tagsResponse)}
         </div>
         <div>
-          <button class="tagging-button tagging-video-title">
-            ${title}
-          </button>
+          <a
+            class="tagging-button"
+            style="${
+              bookmarkResponse.prev || "color: grey; pointer-events: none;"
+            }"
+            href="${bookmarkResponse.prev?.url}"
+          >
+            ◄
+          </a>
+          <a
+            class="tagging-button"
+            style="${
+              bookmarkResponse.next || "color: grey; pointer-events: none;"
+            }"
+            href="${bookmarkResponse.next?.url}"
+          >
+            ►
+          </a>
         </div>
         <div>
           <button id="tagging-options-button" class="tagging-button tagging-options-button">

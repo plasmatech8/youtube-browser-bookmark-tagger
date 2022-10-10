@@ -22,7 +22,13 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
           return;
         }
         const bookmark = searching[0];
-        sendResponse({ message: "got_bookmark", bookmark });
+        const { prev, next } = await findPrevAndNextVideoBookmark(bookmark);
+        sendResponse({
+          message: "got_bookmark",
+          bookmark,
+          prev,
+          next,
+        });
       });
       break;
 
@@ -52,3 +58,31 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
   }
   return true; // To allow a response from an async coroutine
 });
+
+function flattenBookmarkFolders(folder) {
+  return folder.children
+    .map((node) =>
+      node.type === "folder" ? flattenBookmarkFolders(node) : node
+    )
+    .flat();
+}
+
+async function findPrevAndNextVideoBookmark(bookmark) {
+  // Get flat array of valid bookmarks under the grandparent folder (excluding root folder)
+  const parentSearch = await browser.bookmarks.get(bookmark.parentId);
+  const parent = parentSearch[0];
+  const treeSearch = await browser.bookmarks.getSubTree(
+    parent.parentId === "root________" ? parent.id : parent.parentId
+  );
+  const tree = treeSearch[0];
+  const bookmarkArray = flattenBookmarkFolders(tree).filter((b) =>
+    b.url.startsWith("https://www.youtube.com/watch")
+  );
+
+  // Return bookmarks that are one above and below
+  const bookmarkIndex = bookmarkArray.findIndex((b) => b.id === bookmark.id);
+  return {
+    prev: bookmarkArray[bookmarkIndex - 1],
+    next: bookmarkArray[bookmarkIndex + 1],
+  };
+}
