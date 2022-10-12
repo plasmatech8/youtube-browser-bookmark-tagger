@@ -35,11 +35,17 @@
     <h2>Settings</h2>
 
     <div>
-      <label for="tags-input">Tags: (JSON)</label>
+      <label for="tags-input">Tags: (CSV format)</label>
     </div>
     <textarea id="tags-input" name="tags-input" rows="6" cols="50"></textarea>
-    <p><i>Tag must not contain whitespace or # characters</i></p>
-    <p><i>Each sub-array is displayed as a seperate row of tags</i></p>
+    <p>
+      <i> Each tag must not contain whitespace or special characters </i>
+    </p>
+    <p>
+      <i>
+        Each row is displayed as a seperate row of tags under the video player
+      </i>
+    </p>
     <button id="tags-submit" class="btn">Save</button>
   </body>
 </html>

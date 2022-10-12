@@ -10,15 +10,13 @@ async function initInputField() {
   const { tags } = await browser.storage.local.get("tags");
   const inputElement = document.getElementById("tags-input");
   if (tags) {
-    inputElement.value = JSON.stringify(tags, null, 4);
+    inputElement.value = unparseJson(tags);
     inputElement.style.height = inputElement.scrollHeight + "px";
   }
   inputElement.placeholder = `e.g.
 
-[
-  ["❤️Love", "🎸Rock", "🎷Jazz", "⚡️Electronic"],
-  ["Good", "Neutral", "Bad"]
-]
+❤️Love, 🎸Rock, 🎷Jazz, ⚡️Electronic
+Good, Neutral, Bad
 `;
 }
 
@@ -36,7 +34,7 @@ function initSubmitButton() {
         alert("Tags configured ✅");
       } else {
         await browser.storage.local.clear();
-        alert("Tags set to default ✅");
+        alert("Cleared tags ✅");
       }
       initInputField();
     } catch (error) {
@@ -49,40 +47,48 @@ function initSubmitButton() {
  * Helper function to parse and validate input string from the tags input/textarea.
  */
 function parseInput(inputString) {
-  const rows = JSON.parse(inputString);
-  // Array
-  if (!Array.isArray(rows)) {
-    throw Error("Input should be a JSON array");
-  }
+  const tags = [];
+  const rows = inputString.trim().split("\n");
+
+  // For each row
   for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    // Array of arrays
-    if (!Array.isArray(row)) {
-      throw Error(
-        `Input should be a JSON array of arrays (index ${i} is not an array)`
-      );
-    }
+    const row = rows[i].split(",");
+    tags.push([]);
+    // For each tag item
     for (let j = 0; j < row.length; j++) {
-      const tag = row[j];
-      // Array of array of strings
-      if (typeof tag !== "string") {
-        throw Error(
-          `Input should be a JSON array of arrays of string (index ${i}, ${j} is not a string)`
-        );
-      }
-      // Strings should be at least one character
+      const tag = row[j].trim();
+      // Must be at least 1 character
       if (!tag.length) {
         throw Error(
-          `Tags must contain at least one character (index ${i}, ${j} is not valid)`
+          `Tag must contain at least one character.\n(Error in row ${
+            i + 1
+          }, column ${j + 1})`
         );
       }
-      // Strings should not have invalid characters
-      if (/ |#|\s/.test(tag)) {
+      // Must not contain whitespace or special characters
+      // Note:
+      // - whitespace (is the seperator for #tags in the bookmark title)
+      // - hash (is the control character for the start of a #tag)
+      // - quote (is used for HTML attribute="values")
+      // - regex control characters (used for modifying the bookmark title)
+      const pattern = / |#|\s|"|[-\/\\^$*+?.()|[\]{}]/;
+      if (pattern.test(tag)) {
         throw Error(
-          `Tags should not contain whitespace or # characters (index ${i}, ${j} is not valid)`
+          `Tag must not contain whitespace or special characters.\n(Error in row ${
+            i + 1
+          }, column ${j + 1})`
         );
       }
+      // Add tag to array
+      tags[tags.length - 1].push(tag);
     }
   }
-  return rows;
+  return tags;
+}
+
+/**
+ * Helper function to unparse the JSON object used to hold tags. (array of array of string)
+ */
+function unparseJson(jsonArray) {
+  return jsonArray.map((row) => row.join(",")).join("\n");
 }
