@@ -26,7 +26,6 @@ async function createTagsPanel() {
   const settingsResponse = await browser.runtime.sendMessage({
     method: "get_settings",
   });
-  console.log(settingsResponse, bookmarkResponse);
 
   // Setting - Hide UI when no bookmark is found for video
   if (
