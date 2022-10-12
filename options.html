@@ -32,12 +32,16 @@
 
     <p>To change the tags available, edit the settings below.</p>
 
-    <h2>Settings</h2>
+    <h2>Tags</h2>
 
     <div>
       <label for="tags-input">Tags: (CSV format)</label>
     </div>
     <textarea id="tags-input" name="tags-input" rows="6" cols="50"></textarea>
+    <div>
+      <button id="tags-reset" class="btn">Reset</button>
+      <button id="tags-submit" class="btn">Save</button>
+    </div>
     <p>
       <i> Each tag must not contain whitespace or special characters </i>
     </p>
@@ -46,6 +50,5 @@
         Each row is displayed as a seperate row of tags under the video player
       </i>
     </p>
-    <button id="tags-submit" class="btn">Save</button>
   </body>
 </html>

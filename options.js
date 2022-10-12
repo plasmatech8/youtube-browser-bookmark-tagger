@@ -1,6 +1,7 @@
 // Initialise custom tags form
 initInputField();
 initSubmitButton();
+initResetButton();
 
 /**
  * Pre-populate and resize tags input with the current tags saved to storage if they exist.
@@ -41,6 +42,15 @@ function initSubmitButton() {
       alert(error.message);
     }
   });
+}
+
+/**
+ * Listen for click to reset button for the tags input.
+ */
+function initResetButton() {
+  document
+    .getElementById("tags-reset")
+    .addEventListener("click", () => initInputField());
 }
 
 /**
