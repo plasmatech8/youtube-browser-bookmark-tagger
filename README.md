@@ -2,6 +2,8 @@
 
 ![example](images/example.png)
 
+A great way to add tags to your YouTube music videos!
+
 ## Description
 
 A webextension which adds buttons below the YouTube video player.
@@ -27,9 +29,6 @@ Firefox has a native bookmark tagging feature, however it is not supported on an
 Whatsmore, webextension bookmarks API does not expose tags.
 (see [bookmarks.BookmarkTreeNode](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/bookmarks/BookmarkTreeNode))
 So, instead this extension opted towards appending #tags to the bookmark title.
-
-Under consideration:
-* Use CSV notation instead of JSON notation to define tags
 
 Zip command for publishing:
 ```bash
