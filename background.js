@@ -39,6 +39,20 @@ browser.runtime.onMessage.addListener((request, _, sendResponse) => {
       });
       break;
 
+    case "get_settings":
+      browser.storage.local
+        .get(["hideUiWhenNoBookmark", "hidePrevNextButtons"])
+        .then((data) => {
+          const hidePrevNextButtons = data.hidePrevNextButtons;
+          const hideUiWhenNoBookmark = data.hideUiWhenNoBookmark;
+          sendResponse({
+            message: "got_settings",
+            hideUiWhenNoBookmark,
+            hidePrevNextButtons,
+          });
+        });
+      break;
+
     case "toggle_tag":
       const tag = request.tag;
       const bookmarkid = request.bookmarkid;

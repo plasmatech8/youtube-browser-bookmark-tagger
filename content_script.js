@@ -22,10 +22,28 @@ async function createTagsPanel() {
     method: "get_tags",
   });
 
+  // Get settings
+  const settingsResponse = await browser.runtime.sendMessage({
+    method: "get_settings",
+  });
+  console.log(settingsResponse, bookmarkResponse);
+
+  // Setting - Hide UI when no bookmark is found for video
+  if (
+    settingsResponse.hideUiWhenNoBookmark &&
+    bookmarkResponse.message === "no_bookmark_found"
+  ) {
+    return;
+  }
+
   // Build HTML
   const template = document.createElement("div");
   template.id = "youtube-bookmark-tagging-panel";
-  template.innerHTML = panelHTML(bookmarkResponse, tagsResponse);
+  template.innerHTML = panelHTML(
+    bookmarkResponse,
+    tagsResponse,
+    settingsResponse
+  );
 
   // Handle click events
   template.addEventListener("click", async (event) => {
@@ -63,31 +81,18 @@ async function createTagsPanel() {
   }
 }
 
-const panelHTML = (bookmarkResponse, tagsResponse) => {
+const panelHTML = (bookmarkResponse, tagsResponse, settingsResponse) => {
   return `
     <div class="tagging-container" style="display: flex; gap: 4px;">
         <div style="display: flex; flex-grow: 1; flex-direction: column; gap: 0px;">
           ${panelLeftSectionHTML(bookmarkResponse, tagsResponse)}
         </div>
         <div>
-          <a
-            class="tagging-button"
-            style="${
-              bookmarkResponse.prev || "color: grey; pointer-events: none;"
-            }"
-            href="${bookmarkResponse.prev?.url}"
-          >
-            ◄
-          </a>
-          <a
-            class="tagging-button"
-            style="${
-              bookmarkResponse.next || "color: grey; pointer-events: none;"
-            }"
-            href="${bookmarkResponse.next?.url}"
-          >
-            ►
-          </a>
+          ${
+            settingsResponse.hidePrevNextButtons
+              ? ""
+              : prevNextVideoButtonsHTML(bookmarkResponse)
+          }
         </div>
         <div>
           <button id="tagging-options-button" class="tagging-button tagging-options-button">
@@ -95,6 +100,25 @@ const panelHTML = (bookmarkResponse, tagsResponse) => {
           </button>
         </div>
     </div>
+  `;
+};
+
+const prevNextVideoButtonsHTML = (bookmarkResponse) => {
+  return `
+    <a
+      class="tagging-button"
+      style="${bookmarkResponse.prev || "color: grey; pointer-events: none;"}"
+      href="${bookmarkResponse.prev?.url}"
+    >
+      ◄
+    </a>
+    <a
+      class="tagging-button"
+      style="${bookmarkResponse.next || "color: grey; pointer-events: none;"}"
+      href="${bookmarkResponse.next?.url}"
+    >
+      ►
+    </a>
   `;
 };
 
