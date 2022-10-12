@@ -13,42 +13,44 @@
 
     <img src="images/example.png" alt="Example Picture" height="250px" />
 
-    <h2>Description</h2>
+    <section>
+      <h2>Description</h2>
+      <p>This extension activates when you open a YouTube video.</p>
+      <p>
+        If the video exists in your browser bookmarks, then buttons will be
+        displayed below the YouTube video player. (as shown above)
+      </p>
+      <p>
+        When you click on a <code class="btn-active">#tag</code>
+        button, the #tag will be appended to the title of your browser bookmark
+        and the button will light up.
+      </p>
+      <p>The tag is toggled on/off with subsequent clicks.</p>
+      <p>To change the tags available, edit the settings below.</p>
+    </section>
 
-    <p>This extension activates when you open a YouTube video.</p>
+    <section>
+      <h2>Tags</h2>
+      <div>
+        <label for="tags-input">Tags: (CSV format)</label>
+      </div>
+      <textarea id="tags-input" name="tags-input" rows="6" cols="50"></textarea>
+      <div>
+        <button id="tags-reset" class="btn">Reset</button>
+        <button id="tags-submit" class="btn">Save</button>
+      </div>
+      <p>
+        <i>Each tag must not contain whitespace or special characters</i>
+      </p>
+      <p>
+        <i>
+          Each row is displayed as a seperate row of tags under the video player
+        </i>
+      </p>
+    </section>
 
-    <p>
-      If the video exists in your browser bookmarks, then buttons will be
-      displayed below the YouTube video player. (as shown above)
-    </p>
-
-    <p>
-      When you click on a <code class="btn-active">#tag</code>
-      button, the #tag will be appended to the title of your browser bookmark
-      and the button will light up.
-    </p>
-
-    <p>The tag is toggled on/off with subsequent clicks.</p>
-
-    <p>To change the tags available, edit the settings below.</p>
-
-    <h2>Tags</h2>
-
-    <div>
-      <label for="tags-input">Tags: (CSV format)</label>
-    </div>
-    <textarea id="tags-input" name="tags-input" rows="6" cols="50"></textarea>
-    <div>
-      <button id="tags-reset" class="btn">Reset</button>
-      <button id="tags-submit" class="btn">Save</button>
-    </div>
-    <p>
-      <i> Each tag must not contain whitespace or special characters </i>
-    </p>
-    <p>
-      <i>
-        Each row is displayed as a seperate row of tags under the video player
-      </i>
-    </p>
+    <section>
+      <h2>Settings</h2>
+    </section>
   </body>
 </html>
