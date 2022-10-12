@@ -1,19 +1,20 @@
-// Initialise custom tags form
+// Initialise tags inputs
 initInputField();
 initSubmitButton();
 initResetButton();
+
+// Initialise settings inputs
+initHideUiWhenNoBookmarkButton();
+initHidePrevNextVideoButton();
 
 /**
  * Pre-populate and resize tags input with the current tags saved to storage if they exist.
  */
 async function initInputField() {
-  //
   const { tags } = await browser.storage.local.get("tags");
   const inputElement = document.getElementById("tags-input");
-  if (tags) {
-    inputElement.value = unparseJson(tags);
-    inputElement.style.height = inputElement.scrollHeight + "px";
-  }
+  inputElement.value = tags ? unparseJson(tags) : "";
+  inputElement.style.height = inputElement.scrollHeight + "px";
   inputElement.placeholder = `e.g.
 
 ❤️Love, 🎸Rock, 🎷Jazz, ⚡️Electronic
@@ -34,7 +35,7 @@ function initSubmitButton() {
         await browser.storage.local.set({ tags: inputJson });
         alert("Tags configured ✅");
       } else {
-        await browser.storage.local.clear();
+        await browser.storage.local.set({ tags: undefined });
         alert("Cleared tags ✅");
       }
       initInputField();
@@ -51,6 +52,32 @@ function initResetButton() {
   document
     .getElementById("tags-reset")
     .addEventListener("click", () => initInputField());
+}
+
+/**
+ * Listen for click on the setting for hiding UI when no bookmark is found.
+ */
+function initHideUiWhenNoBookmarkButton() {
+  document
+    .getElementById("hide-ui-when-no-bookmark")
+    .addEventListener("change", async (event) => {
+      await browser.storage.local.set({
+        hideUiWhenNoBookmark: event.currentTarget.checked,
+      });
+    });
+}
+
+/**
+ * Listen for click on the setting for hiding the previous/next video buttons.
+ */
+function initHidePrevNextVideoButton() {
+  document
+    .getElementById("hide-prev-next-video-buttons")
+    .addEventListener("change", async (event) => {
+      await browser.storage.local.set({
+        hidePrevNextButtons: event.currentTarget.checked,
+      });
+    });
 }
 
 /**
