@@ -6,7 +6,7 @@
   "icons": {
     "128": "./images/icon-128x128.png"
   },
-  "permissions": ["storage", "bookmarks"],
+  "permissions": ["storage", "bookmarks", "https://noembed.com/embed"],
   "background": {
     "scripts": ["./background.js"]
   },

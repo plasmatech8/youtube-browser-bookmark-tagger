@@ -7,6 +7,9 @@ initResetButton();
 initHideUiWhenNoBookmarkButton();
 initHidePrevNextVideoButton();
 
+// Initialise tools inputs
+initFindBadBookmarksButton();
+
 /**
  * Pre-populate and resize tags input with the current tags saved to storage if they exist.
  */
@@ -78,6 +81,130 @@ function initHidePrevNextVideoButton() {
         hidePrevNextButtons: event.currentTarget.checked,
       });
     });
+}
+
+function initFindBadBookmarksButton() {
+  document
+    .getElementById("find-bad-bookmarks-button")
+    .addEventListener("click", () => {
+      browser.bookmarks.getTree(async (gettingTree) => {
+        const badBookmarksElement = document.getElementById(
+          "bad-bookmarks-output"
+        );
+        badBookmarksElement.innerText = "Loading...";
+        try {
+          const problems = [];
+          // Get flat list of video bookmarks
+          const fullTree = gettingTree[0];
+          const bookmarks = flattenBookmarkFolders(fullTree).filter((b) =>
+            b.url.startsWith("https://www.youtube.com/watch")
+          );
+          // Get list of video bookmark and metadata information (includes availability)
+          const videos = await Promise.all(
+            bookmarks.map(async (b) => {
+              const videoId = new URL(b.url).searchParams.get("v");
+              const res = await fetch(
+                `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`
+              );
+              const v = await res.json();
+              return { bookmark: b, info: v };
+            })
+          );
+          videos.forEach((v) => {
+            // Scan through videos to see if there are unavailable videos
+            if (v.info.error) {
+              switch (v.info.error) {
+                case "404 Not Found":
+                case "403 Forbidden":
+                  problems.push({
+                    title: "Video Unavailable",
+                    code: "unavailable",
+                    videos: [v],
+                  });
+                  break;
+                case "400 Bad Request":
+                  problems.push({
+                    title: "Video does not exist",
+                    code: "not_exist",
+                    videos: [v],
+                  });
+                  break;
+                default:
+                  problems.push({
+                    title: `Unknown error getting video information`,
+                    code: "unknown",
+                    videos: [v],
+                  });
+                  break;
+              }
+            }
+            // Scan through videos to see if there are duplicate bookmarks
+            const dups = [v];
+            videos.forEach((v2) => {
+              if (v !== v2 && v.info.url === v2.info.url) {
+                dups.push(v2);
+              }
+            });
+            if (dups.length > 1) {
+              problems.push({
+                title: "Duplicated Videos found in Browser Bookmarks",
+                code: "duplicate",
+                videos: dups,
+              });
+            }
+          });
+
+          // Inject HTML
+          const bookmarkItemHTML = (v) => `
+            <li><a href="${v.bookmark.url}">${v.bookmark.fullpath}</a></li>
+          `;
+          const problemItemHTML = (p) => `
+            <h4>${p.title}</h4>
+            <ul>
+              ${p.videos.map(bookmarkItemHTML).join("")}
+            </ul>
+          `;
+          const problemCodeCountText = (code) =>
+            `${code} (x${problems.filter((v) => v.code === code).length})`;
+          const problemsDisplayHTML = (problems) => `
+            <p>
+            Found:
+              ${problemCodeCountText("duplicate")},
+              ${problemCodeCountText("not_exist")},
+              ${problemCodeCountText("unavailable")},
+              ${problemCodeCountText("unknown")}
+            </p>
+            ${problems
+              .sort((p1, p2) => p1.code > p2.code)
+              .map(problemItemHTML)
+              .join("")}
+          `;
+
+          badBookmarksElement.innerHTML = problemsDisplayHTML(problems);
+        } catch (e) {
+          badBookmarksElement.innerText = "Error. Please try again.";
+          console.error(e);
+        }
+      });
+    });
+}
+
+/**
+ * Helper function to flatten a tree of BookmarkTreeNodes into a flat array of video info.
+ */
+function flattenBookmarkFolders(folder) {
+  const folderFullpath = folder.fullpath || "";
+  return folder.children
+    .map((node) => {
+      const nodeWithFullpath = {
+        ...node,
+        fullpath: `${folderFullpath}/${node.title}`,
+      };
+      return node.type === "folder"
+        ? flattenBookmarkFolders(nodeWithFullpath)
+        : nodeWithFullpath;
+    })
+    .flat();
 }
 
 /**
