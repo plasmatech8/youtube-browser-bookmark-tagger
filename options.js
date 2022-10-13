@@ -110,7 +110,7 @@ function initFindBadBookmarksButton() {
               return { bookmark: b, info: v };
             })
           );
-          videos.forEach((v) => {
+          videos.forEach((v, i) => {
             // Scan through videos to see if there are unavailable videos
             if (v.info.error) {
               switch (v.info.error) {
@@ -139,9 +139,11 @@ function initFindBadBookmarksButton() {
               }
             }
             // Scan through videos to see if there are duplicate bookmarks
+            if (v.alreadySeenAsDuplicate) return;
             const dups = [v];
-            videos.forEach((v2) => {
+            videos.slice(i + 1).forEach((v2) => {
               if (v !== v2 && v.info.url === v2.info.url) {
+                v2.alreadySeenAsDuplicate = true;
                 dups.push(v2);
               }
             });
@@ -160,9 +162,19 @@ function initFindBadBookmarksButton() {
           `;
           const problemItemHTML = (p) => `
             <h4>${p.title}</h4>
-            <ul>
-              ${p.videos.map(bookmarkItemHTML).join("")}
-            </ul>
+            <div style="display: flex; align-items: center">
+              <img
+                src="${sanitize(
+                  p.videos[0].info.thumbnail_url || "https://i.ytimg.com/"
+                )}"
+                alt="thumbnail"
+                style="display: inline-block"
+                height="80px"
+              />
+              <ul>
+                ${p.videos.map(bookmarkItemHTML).join("")}
+              </ul>
+            </div>
           `;
           const problemCodeCountText = (code) =>
             `${code} (x${problems.filter((v) => v.code === code).length})`;
@@ -255,4 +267,20 @@ function parseInput(inputString) {
  */
 function unparseJson(jsonArray) {
   return jsonArray.map((row) => row.join(",")).join("\n");
+}
+
+/**
+ * Helper function to sanitise string before adding tothe dom.
+ */
+function sanitize(string) {
+  const map = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#x27;",
+    "/": "&#x2F;",
+  };
+  const reg = /[&<>"'/]/gi;
+  return string.replace(reg, (match) => map[match]);
 }
