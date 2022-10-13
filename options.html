@@ -11,35 +11,80 @@
   <body>
     <h1>YouTube Browser Bookmark Tagger</h1>
 
-    <img src="images/example.png" alt="Example Picture" height="250px" />
+    <img
+      src="images/example-annotated.png"
+      alt="Example Picture"
+      height="250px"
+    />
 
-    <h2>Description</h2>
+    <section>
+      <h2>Description</h2>
+      <p>This extension activates when you open a YouTube video.</p>
+      <p>
+        If the video exists in your browser bookmarks, then buttons will be
+        displayed below the YouTube video player. (as shown above)
+      </p>
+      <p>
+        When you click on a <code>#tag</code>
+        button, the #tag will be appended to the title of your browser bookmark
+        and the button will light up.
+      </p>
+      <p>The tag is toggled on/off with subsequent clicks.</p>
+    </section>
 
-    <p>This extension activates when you open a YouTube video.</p>
+    <section>
+      <h2>Tags</h2>
+      <div>
+        <label for="tags-input">Tags: (CSV format)</label>
+      </div>
+      <textarea id="tags-input" name="tags-input" rows="6" cols="50"></textarea>
+      <div>
+        <button id="tags-reset">Reset</button>
+        <button id="tags-submit">Save</button>
+      </div>
+      <p>
+        <i>Each tag must not contain whitespace or special characters</i>
+      </p>
+      <p>
+        <i>
+          Each line is displayed as a seperate row of tags under the video
+          player
+        </i>
+      </p>
+    </section>
 
-    <p>
-      If the video exists in your browser bookmarks, then buttons will be
-      displayed below the YouTube video player. (as shown above)
-    </p>
+    <section>
+      <h2>Settings</h2>
+      <div>
+        <input
+          type="checkbox"
+          id="hide-ui-when-no-bookmark"
+          name="hide-ui-when-no-bookmark"
+        />
+        <label for="hide-ui-when-no-bookmark">
+          Hide UI when no video is found in browser bookmarks
+        </label>
+      </div>
+      <br />
+      <div>
+        <input
+          type="checkbox"
+          id="hide-prev-next-video-buttons"
+          name="hide-prev-next-video-buttons"
+        />
+        <label for="hide-prev-next-video-buttons">
+          Hide previous/next video buttons in the UI
+        </label>
+      </div>
+    </section>
 
-    <p>
-      When you click on a <code class="btn-active">#tag</code>
-      button, the #tag will be appended to the title of your browser bookmark
-      and the button will light up.
-    </p>
-
-    <p>The tag is toggled on/off with subsequent clicks.</p>
-
-    <p>To change the tags available, edit the settings below.</p>
-
-    <h2>Settings</h2>
-
-    <div>
-      <label for="tags-input">Tags: (JSON)</label>
-    </div>
-    <textarea id="tags-input" name="tags-input" rows="6" cols="50"></textarea>
-    <p><i>Tag must not contain whitespace or # characters</i></p>
-    <p><i>Each sub-array is displayed as a seperate row of tags</i></p>
-    <button id="tags-submit" class="btn">Save</button>
+    <section>
+      <h2>Tools</h2>
+      <button id="find-bad-bookmarks-button">Find Bad Bookmarks</button>
+      <p>
+        <i>Find duplicated bookmarks and unavailable YouTube videos.</i>
+      </p>
+      <div id="bad-bookmarks-output"></div>
+    </section>
   </body>
 </html>
